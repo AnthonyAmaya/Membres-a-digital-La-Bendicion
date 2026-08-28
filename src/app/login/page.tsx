@@ -133,10 +133,6 @@ export default function LoginPage() {
               <LoginForm />
             </div>
           </div>
-
-          <p className="mt-6 text-center text-[11px] tracking-wide text-muted-foreground lg:text-left">
-            Iglesia {CHURCH.name}
-          </p>
         </div>
       </main>
     </div>

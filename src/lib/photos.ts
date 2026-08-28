@@ -41,19 +41,22 @@ export function saveMemberPhoto(buffer: Buffer, mime: string, originalName = "")
   }
   ensurePhotosDir();
   const name = `${crypto.randomUUID()}.${ext}`;
-  fs.writeFileSync(path.join(PHOTOS_DIR, name), buffer);
+  fs.writeFileSync(path.join(/*turbopackIgnore: true*/ PHOTOS_DIR, name), buffer);
   return `fotos/${name}`;
 }
 
 export function deletePhotoFile(storedPath?: string | null) {
   if (!storedPath) return;
-  const full = path.join(PHOTOS_DIR, photoFileName(storedPath));
+  const full = path.join(
+    /*turbopackIgnore: true*/ PHOTOS_DIR,
+    photoFileName(storedPath)
+  );
   if (fs.existsSync(full)) fs.unlinkSync(full);
 }
 
 export function readPhoto(filename: string) {
   if (!/^[0-9a-f-]{36}\.(jpg|png|webp)$/i.test(filename)) return null;
-  const full = path.join(PHOTOS_DIR, filename);
+  const full = path.join(/*turbopackIgnore: true*/ PHOTOS_DIR, filename);
   if (!fs.existsSync(full)) return null;
   const ext = path.extname(filename).toLowerCase();
   const type =
@@ -65,6 +68,6 @@ export function clearAllPhotos() {
   if (!fs.existsSync(PHOTOS_DIR)) return;
   for (const file of fs.readdirSync(PHOTOS_DIR)) {
     if (file.startsWith(".")) continue;
-    fs.unlinkSync(path.join(PHOTOS_DIR, file));
+    fs.unlinkSync(path.join(/*turbopackIgnore: true*/ PHOTOS_DIR, file));
   }
 }

@@ -10,7 +10,7 @@ import { MemberAvatar } from "@/components/member-avatar";
 import { CommunityPulse } from "@/components/community-pulse";
 import { useMembers } from "@/components/members-provider";
 import { StatusBadge } from "@/components/status-badge";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { assignmentMinistryLabel, roleLabel } from "@/lib/catalog";
 import {
   currentStepLabel,
@@ -21,8 +21,7 @@ import type { Member, MemberStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 export default function HomePage() {
-  const { members, steps, ministries, ready, error, restoreDemo, loadExamples } =
-    useMembers();
+  const { members, steps, ministries, ready, error } = useMembers();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<MemberStatus | "todos">("todos");
   const [selectedId, setSelectedId] = useState<string | "resumen">("resumen");
@@ -135,12 +134,7 @@ export default function HomePage() {
         {selectedMember ? (
           <MemberWorkspace member={selectedMember} />
         ) : (
-          <ChurchWorkspace
-            members={members}
-            steps={steps}
-            restoreDemo={restoreDemo}
-            loadExamples={loadExamples}
-          />
+          <ChurchWorkspace members={members} steps={steps} />
         )}
       </section>
     </div>
@@ -150,13 +144,9 @@ export default function HomePage() {
 function ChurchWorkspace({
   members,
   steps,
-  restoreDemo,
-  loadExamples,
 }: {
   members: Member[];
   steps: { id: string; label: string }[];
-  restoreDemo: () => Promise<void>;
-  loadExamples: () => Promise<void>;
 }) {
   const boardSteps = steps.map((step) => ({
     id: step.id,
@@ -183,33 +173,6 @@ function ChurchWorkspace({
       <CaminoBoard steps={boardSteps} counts />
 
       <CommunityPulse members={members} />
-
-      <p className="text-xs text-muted-foreground">
-        Demo vacía: registra personas o carga ejemplos.{" "}
-        <Button
-          variant="link"
-          className="h-auto p-0 text-xs"
-          onClick={() => loadExamples()}
-        >
-          Cargar ejemplos
-        </Button>
-        {" · "}
-        <Button
-          variant="link"
-          className="h-auto p-0 text-xs"
-          onClick={() => {
-            if (
-              confirm(
-                "¿Vaciar la comunidad? Se quitan las personas y las fotos. Quedan ministerios y el camino."
-              )
-            ) {
-              restoreDemo();
-            }
-          }}
-        >
-          Vaciar
-        </Button>
-      </p>
     </div>
   );
 }

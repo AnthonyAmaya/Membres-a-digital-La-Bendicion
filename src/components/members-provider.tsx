@@ -9,13 +9,11 @@ import {
   useState,
 } from "react";
 
-import { loadAppData } from "@/app/actions/members";
 import {
   createMemberAction,
   deleteMemberAction,
+  loadAppData,
   removeMemberPhotoAction,
-  restoreDemoAction,
-  loadExamplesAction,
   saveMemberPhotoAction,
   toggleStepAction,
   updateMemberAction,
@@ -56,8 +54,6 @@ type AppDataContextValue = {
   ) => Promise<Member | undefined>;
   deleteMember: (id: string) => Promise<void>;
   toggleStep: (id: string, stepId: string) => Promise<void>;
-  restoreDemo: () => Promise<void>;
-  loadExamples: () => Promise<void>;
   addStep: (input: { label: string; description: string }) => Promise<void>;
   updateStep: (
     id: string,
@@ -149,16 +145,6 @@ export function MembersProvider({ children }: { children: React.ReactNode }) {
     [reload]
   );
 
-  const restoreDemo = useCallback(async () => {
-    await restoreDemoAction();
-    await reload();
-  }, [reload]);
-
-  const loadExamples = useCallback(async () => {
-    await loadExamplesAction();
-    await reload();
-  }, [reload]);
-
   const addStep = useCallback(
     async (input: { label: string; description: string }) => {
       await createStepAction(input);
@@ -235,8 +221,6 @@ export function MembersProvider({ children }: { children: React.ReactNode }) {
       updateMember,
       deleteMember,
       toggleStep,
-      restoreDemo,
-      loadExamples,
       addStep,
       updateStep,
       deleteStep: removeStep,
@@ -257,8 +241,6 @@ export function MembersProvider({ children }: { children: React.ReactNode }) {
       updateMember,
       deleteMember,
       toggleStep,
-      restoreDemo,
-      loadExamples,
       addStep,
       updateStep,
       removeStep,

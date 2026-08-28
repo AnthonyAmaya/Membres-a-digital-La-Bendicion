@@ -4,21 +4,10 @@ Aplicación web para que el pastor y el equipo de **Iglesia La Bendición** acom
 
 Lema: **Amparando · Librando · Salvando**
 
-Esta copia es una **demo**: arranca sin personas. Quedan los ministerios y el camino por defecto para que puedas registrar a quien llegue.
-
-## Acceso
-
-- Usuario: `pastor`
-- Contraseña: `bendicion`
-
-En Vercel, en **Settings → Environment Variables**, conviene definir `SESSION_SECRET` (cualquier texto largo y secreto). Si no, se usa una clave de demostración.
-
 ## Datos
 
 - En local: SQLite en `data/la-bendicion.db` y fotos en `data/fotos`.
-- En Vercel el disco no persiste: base y fotos viven en `/tmp` y pueden vaciarse entre visitas o redespliegues. Sirve para mostrar la demo; para una iglesia real hace falta un servidor con disco o una base externa (por ejemplo Turso).
-
-En el inicio puedes **cargar ejemplos** (personas inventadas) o **vaciar** la comunidad.
+- En Vercel el disco no persiste: base y fotos viven en `/tmp` y pueden vaciarse entre visitas o redespliegues. Para una iglesia real hace falta un servidor con disco o una base externa.
 
 ## Qué puedes hacer
 
@@ -33,11 +22,18 @@ En el inicio puedes **cargar ejemplos** (personas inventadas) o **vaciar** la co
 
 ## Cómo correrlo en local
 
-Necesitas **Node.js 22** o superior.
+Necesitas **Node.js 22** o superior y **pnpm** (no npm).
+
+Si aún no tienes pnpm:
 
 ```bash
-npm install
-npm run dev
+corepack enable
+corepack prepare pnpm@10.33.3 --activate
+```
+
+```bash
+pnpm install
+pnpm dev
 ```
 
 Abre [http://127.0.0.1:43123](http://127.0.0.1:43123).

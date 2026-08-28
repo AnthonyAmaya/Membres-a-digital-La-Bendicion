@@ -7,7 +7,6 @@ import { loginAction } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { DEFAULT_LOGIN } from "@/lib/auth-constants";
 
 export function LoginForm() {
   const [state, action, pending] = useActionState(loginAction, null);
@@ -75,13 +74,6 @@ export function LoginForm() {
       >
         {pending ? "Entrando…" : "Entrar"}
       </Button>
-      <p className="text-center text-xs leading-relaxed text-muted-foreground">
-        Acceso inicial: usuario{" "}
-        <span className="font-medium text-foreground">{DEFAULT_LOGIN.username}</span>
-        {" · "}
-        contraseña{" "}
-        <span className="font-medium text-foreground">{DEFAULT_LOGIN.password}</span>
-      </p>
     </form>
   );
 }

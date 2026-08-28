@@ -1,5 +1,5 @@
 import { trajectoryForStatus } from "./catalog";
-import { getDb, loadExampleMembers, resetDemoData } from "./db";
+import { getDb } from "./db";
 import { deletePhotoFile } from "./photos";
 import type {
   Member,
@@ -442,14 +442,6 @@ export function moveMinistry(id: string, direction: "up" | "down") {
     other.id
   );
   return listMinistries();
-}
-
-export function restoreDemo() {
-  resetDemoData();
-}
-
-export function loadExamples() {
-  loadExampleMembers();
 }
 
 export function findUserByUsername(username: string) {

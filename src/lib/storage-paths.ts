@@ -8,9 +8,15 @@ export function storageRoot() {
 }
 
 export function dbFilePath() {
-  return path.join(storageRoot(), "la-bendicion.db");
+  if (process.env.VERCEL) {
+    return path.join("/tmp", "la-bendicion", "la-bendicion.db");
+  }
+  return path.join(process.cwd(), "data", "la-bendicion.db");
 }
 
 export function photosDir() {
-  return path.join(storageRoot(), "fotos");
+  if (process.env.VERCEL) {
+    return path.join("/tmp", "la-bendicion", "fotos");
+  }
+  return path.join(process.cwd(), "data", "fotos");
 }

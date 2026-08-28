@@ -4,11 +4,9 @@ import { DatabaseSync } from "node:sqlite";
 
 import { DEFAULT_LOGIN } from "./auth-constants";
 import { DEFAULT_MINISTRIES, DEFAULT_TRAJECTORY_STEPS } from "./catalog";
-import { clearAllPhotos, ensurePhotosDir } from "./photos";
+import { ensurePhotosDir } from "./photos";
 import { hashPassword } from "./password";
-import { SEED_MEMBERS } from "./seed";
 import { dbFilePath } from "./storage-paths";
-import type { Member } from "./types";
 
 const DB_PATH = dbFilePath();
 
@@ -150,58 +148,6 @@ function seedMinistries(db: DatabaseSync) {
   }
 }
 
-function insertMembers(db: DatabaseSync, members: Member[]) {
-  const insertMember = db.prepare(`
-    INSERT INTO members (
-      id, first_name, last_name, gender, birth_date, phone, email, address, city,
-      marital_status, occupation, how_they_came, invited_by, conversion_date,
-      status, notes, photo_path, created_at, updated_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `);
-  const insertMinistry = db.prepare(
-    "INSERT INTO member_ministries (member_id, ministry_id, role) VALUES (?, ?, ?)"
-  );
-  const insertProgress = db.prepare(
-    "INSERT INTO member_trajectory (member_id, step_id, completed, completed_at, notes) VALUES (?, ?, ?, ?, ?)"
-  );
-
-  for (const member of members) {
-    insertMember.run(
-      member.id,
-      member.firstName,
-      member.lastName,
-      member.gender ?? null,
-      member.birthDate ?? null,
-      member.phone ?? null,
-      member.email ?? null,
-      member.address ?? null,
-      member.city ?? null,
-      member.maritalStatus ?? null,
-      member.occupation ?? null,
-      member.howTheyCame ?? null,
-      member.invitedBy ?? null,
-      member.conversionDate ?? null,
-      member.status,
-      member.notes ?? null,
-      member.photoPath ?? null,
-      member.createdAt,
-      member.updatedAt
-    );
-    for (const ministry of member.ministries) {
-      insertMinistry.run(member.id, ministry.ministryId, ministry.role);
-    }
-    for (const step of member.trajectory) {
-      insertProgress.run(
-        member.id,
-        step.id,
-        step.completed ? 1 : 0,
-        step.completedAt ?? null,
-        step.notes ?? null
-      );
-    }
-  }
-}
-
 export function getDb() {
   const globalDb = globalThis as GlobalDb;
   if (!globalDb.__laBendicionDb) {
@@ -211,28 +157,4 @@ export function getDb() {
     seedIfEmpty(globalDb.__laBendicionDb);
   }
   return globalDb.__laBendicionDb;
-}
-
-export function resetDemoData() {
-  const db = getDb();
-  clearAllPhotos();
-  db.exec(`
-    DELETE FROM member_trajectory;
-    DELETE FROM member_ministries;
-    DELETE FROM members;
-    DELETE FROM trajectory_steps;
-    DELETE FROM ministries;
-  `);
-  const insertStep = db.prepare(
-    "INSERT INTO trajectory_steps (id, label, description, sort_order) VALUES (?, ?, ?, ?)"
-  );
-  for (const step of DEFAULT_TRAJECTORY_STEPS) {
-    insertStep.run(step.id, step.label, step.description, step.sortOrder);
-  }
-  seedMinistries(db);
-}
-
-export function loadExampleMembers() {
-  resetDemoData();
-  insertMembers(getDb(), SEED_MEMBERS);
 }

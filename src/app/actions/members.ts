@@ -7,8 +7,6 @@ import {
   listMembers,
   listMinistries,
   listTrajectorySteps,
-  restoreDemo,
-  loadExamples,
   setMemberPhotoPath,
   toggleMemberStep,
   updateMember,
@@ -49,16 +47,6 @@ export async function deleteMemberAction(id: string) {
 export async function toggleStepAction(memberId: string, stepId: string) {
   await requireUser();
   toggleMemberStep(memberId, stepId);
-}
-
-export async function restoreDemoAction() {
-  await requireUser();
-  restoreDemo();
-}
-
-export async function loadExamplesAction() {
-  await requireUser();
-  loadExamples();
 }
 
 export async function saveMemberPhotoAction(memberId: string, formData: FormData) {
